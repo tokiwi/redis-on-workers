@@ -308,11 +308,12 @@ export function createParser(options: CreateParserOptions) {
       const oldLength = context.buffer.length;
       const remainingLength = oldLength - context.offset;
 
-      const newBuffer = new Uint8Array(remainingLength + context.buffer.length);
+      const newBuffer = new Uint8Array(remainingLength + buffer.length);
 
       newBuffer.set(context.buffer.subarray(context.offset, oldLength));
       newBuffer.set(buffer, remainingLength);
 
+      context.buffer = newBuffer;
       context.offset = 0;
 
       if (context.arrayCache.length) {
