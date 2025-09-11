@@ -115,13 +115,10 @@ export class RedisInstance {
       .catch((error) => {
         this.connectionInstance = undefined;
         throw error;
-      })
-      .then((connection) => {
-        this.connectionInstance = connection;
-        return connection;
       });
 
-    void this.startMessageListener(await this.connectionInstance)
+    const connection = await this.connectionInstance;
+    void this.startMessageListener(connection)
       .catch((e) => {
         this.logger?.(
           "Error sending command",
@@ -159,8 +156,8 @@ export class RedisInstance {
       },
     );
 
-    const writer = socket.writable.getWriter();
-    const reader = socket.readable.getReader();
+    const writer = socket.writable.getWriter() as WritableStreamDefaultWriter<Uint8Array>;
+    const reader = socket.readable.getReader() as ReadableStreamDefaultReader<Uint8Array>;
 
     return {
       socket,
